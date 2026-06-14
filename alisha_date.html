@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Hey Alisha 🖤</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pk:#C45F8A;--pk-d:#993556;--pk-l:#FBEAF0;--pk-m:#ED93B1;
+  --tx:#1a1a1a;--ts:#666;--tt:#aaa;
+  --bg:#f7f5f2;--card:#fff;--card2:#faf9f7;
+  --b:rgba(0,0,0,0.08);--bh:rgba(0,0,0,0.16);--bfocus:rgba(196,95,138,0.4);
+  --r:16px;--rs:10px;--rp:999px;
+  --sh:0 2px 12px rgba(0,0,0,0.06);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --tx:#f0ede8;--ts:#aaa;--tt:#666;
+    --bg:#0f0f0f;--card:#1a1a1a;--card2:#222;
+    --b:rgba(255,255,255,0.08);--bh:rgba(255,255,255,0.16);
+    --pk-l:#2a1520;--sh:0 2px 12px rgba(0,0,0,0.3);
+  }
+}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+
+/* PAGES */
+.page{display:none;min-height:100vh;flex-direction:column;animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1);}
+.page.active{display:flex;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* TOP BAR */
+.bar{padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:0.5px solid var(--b);}
+.back-btn{background:var(--card);border:0.5px solid var(--b);border-radius:var(--rp);padding:6px 14px;font-size:13px;color:var(--ts);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:all 0.15s;flex-shrink:0;}
+.back-btn:hover{border-color:var(--pk);color:var(--pk);}
+.prog-wrap{flex:1;height:4px;background:var(--b);border-radius:var(--rp);overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--pk-m),var(--pk));border-radius:var(--rp);transition:width 0.5s cubic-bezier(0.22,1,0.36,1);}
+.step-lbl{font-size:12px;color:var(--tt);flex-shrink:0;}
+
+/* INNER */
+.inner{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 1.25rem 4rem;max-width:640px;margin:0 auto;width:100%;}
+
+/* TYPOGRAPHY */
+.eyebrow{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--pk);margin-bottom:0.75rem;font-weight:500;display:flex;align-items:center;gap:6px;}
+.qtitle{font-size:clamp(24px,4.5vw,36px);font-weight:500;line-height:1.2;margin-bottom:0.5rem;}
+.qsub{font-size:14px;color:var(--ts);margin-bottom:2rem;line-height:1.6;}
+
+/* CARDS GRID */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin-bottom:1.5rem;}
+.card{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:1.1rem;cursor:pointer;transition:border-color 0.18s,background 0.18s,transform 0.15s,box-shadow 0.18s;user-select:none;position:relative;}
+.card:hover{border-color:var(--bh);transform:translateY(-2px);box-shadow:var(--sh);}
+.card.on{border:1.5px solid var(--pk);background:var(--pk-l);transform:translateY(-2px);box-shadow:0 4px 16px rgba(196,95,138,0.18);}
+.card-ico{font-size:24px;color:var(--tt);margin-bottom:10px;transition:color 0.18s;}
+.card.on .card-ico{color:var(--pk);}
+.card-name{font-size:14px;font-weight:500;color:var(--tx);line-height:1.3;}
+.card.on .card-name{color:var(--pk-d);}
+.card-hint{font-size:12px;color:var(--ts);margin-top:4px;line-height:1.4;}
+.badge{display:inline-block;margin-top:7px;font-size:10px;padding:3px 9px;border-radius:var(--rp);background:var(--pk-l);color:var(--pk-d);font-weight:500;letter-spacing:0.05em;}
+.card.on .badge{background:rgba(196,95,138,0.2);color:var(--pk-d);}
+.tick{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:var(--pk);display:none;align-items:center;justify-content:center;}
+.card.on .tick{display:flex;}
+.tick i{font-size:12px;color:#fff;}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;}
+.chip{padding:9px 16px;border-radius:var(--rp);font-size:13px;border:1px solid var(--b);cursor:pointer;background:var(--card);color:var(--ts);transition:all 0.18s;user-select:none;display:flex;align-items:center;gap:6px;}
+.chip:hover{border-color:var(--pk);color:var(--pk-d);}
+.chip.on{background:var(--pk);color:#fff;border-color:var(--pk);}
+
+/* FIELDS */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.1rem;}
+.field label{font-size:13px;color:var(--ts);font-weight:500;}
+.field input,.field select,.field textarea{
+  background:var(--card);border:1px solid var(--b);border-radius:var(--rs);
+  padding:11px 14px;font-size:14px;color:var(--tx);outline:none;
+  transition:border-color 0.18s,box-shadow 0.18s;font-family:inherit;width:100%;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--pk);box-shadow:0 0 0 3px var(--bfocus);
+}
+.field textarea{resize:vertical;min-height:80px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:420px){.row2{grid-template-columns:1fr;}}
+
+/* BUTTONS */
+.next-btn{
+  width:100%;padding:15px;background:var(--pk);color:#fff;
+  border:none;border-radius:var(--rs);font-size:15px;font-weight:500;
+  cursor:pointer;font-family:inherit;margin-top:0.5rem;
+  transition:background 0.18s,transform 0.15s,box-shadow 0.18s;
+  box-shadow:0 4px 14px rgba(196,95,138,0.3);
+}
+.next-btn:hover{background:var(--pk-d);transform:translateY(-1px);box-shadow:0 6px 18px rgba(196,95,138,0.4);}
+.next-btn:active{transform:translateY(0);}
+.skip-lnk{text-align:center;margin-top:1rem;font-size:13px;color:var(--tt);cursor:pointer;transition:color 0.15s;}
+.skip-lnk:hover{color:var(--pk);}
+.note{font-size:12px;color:var(--tt);font-style:italic;margin-top:8px;display:flex;align-items:center;gap:5px;}
+
+/* HERO PAGE */
+.hero-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;}
+.hero-icon{width:72px;height:72px;border-radius:50%;background:var(--pk-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;border:1px solid rgba(196,95,138,0.2);}
+.hero-icon i{font-size:34px;color:var(--pk);}
+.hero-title{font-size:clamp(28px,6vw,52px);font-weight:500;line-height:1.15;margin-bottom:1rem;}
+.hero-title span{color:var(--pk);}
+.hero-sub{font-size:15px;color:var(--ts);max-width:340px;margin:0 auto 2.5rem;line-height:1.65;}
+.yes-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 32px;background:var(--pk);color:#fff;
+  border:none;border-radius:var(--rp);font-size:15px;font-weight:500;
+  cursor:pointer;font-family:inherit;
+  transition:all 0.18s;box-shadow:0 4px 20px rgba(196,95,138,0.35);
+}
+.yes-btn:hover{background:var(--pk-d);transform:translateY(-2px);box-shadow:0 6px 24px rgba(196,95,138,0.45);}
+
+/* FLOATING NO BUTTON */
+.no-btn{
+  position:fixed;bottom:48px;right:36px;
+  padding:10px 20px;border-radius:var(--rp);
+  background:var(--card);border:1px solid var(--b);
+  font-size:13px;color:var(--ts);cursor:pointer;
+  font-family:inherit;z-index:999;
+  transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:var(--sh);
+}
+
+/* SUMMARY */
+.sum-card{background:var(--card);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;box-shadow:var(--sh);}
+.sum-header{background:var(--pk-l);padding:1.1rem 1.25rem;border-bottom:1px solid rgba(196,95,138,0.15);}
+.sum-header-title{font-size:14px;font-weight:500;color:var(--pk-d);}
+.sum-row{display:flex;align-items:flex-start;gap:12px;padding:12px 1.25rem;border-bottom:0.5px solid var(--b);}
+.sum-row:last-child{border-bottom:none;}
+.sum-ico-wrap{width:32px;height:32px;border-radius:50%;background:var(--pk-l);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.sum-ico-wrap i{font-size:15px;color:var(--pk);}
+.sum-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--tt);margin-bottom:3px;}
+.sum-val{font-size:14px;color:var(--tx);line-height:1.5;}
+
+/* FINAL ACTIONS */
+.action-stack{display:flex;flex-direction:column;gap:10px;}
+.wa-btn{
+  width:100%;padding:15px;background:#25D366;color:#fff;
+  border:none;border-radius:var(--rs);font-size:15px;font-weight:500;
+  cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all 0.18s;box-shadow:0 4px 14px rgba(37,211,102,0.3);
+}
+.wa-btn:hover{background:#1ebe5d;transform:translateY(-1px);}
+.copy-btn{
+  width:100%;padding:14px;background:var(--card);color:var(--tx);
+  border:1px solid var(--b);border-radius:var(--rs);font-size:14px;
+  cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:all 0.18s;
+}
+.copy-btn:hover{border-color:var(--pk);color:var(--pk);}
+.restart-lnk{text-align:center;margin-top:0.75rem;font-size:13px;color:var(--tt);cursor:pointer;}
+.restart-lnk:hover{color:var(--pk);}
+
+/* CUSTOM CIG INPUT — animated reveal */
+.custom-reveal{overflow:hidden;max-height:0;transition:max-height 0.4s cubic-bezier(0.22,1,0.36,1),opacity 0.3s;opacity:0;pointer-events:none;}
+.custom-reveal.open{max-height:120px;opacity:1;pointer-events:auto;}
+
+/* SENT PAGE */
+.sent-icon{width:80px;height:80px;border-radius:50%;background:var(--pk-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;}
+.sent-icon i{font-size:38px;color:var(--pk);}
+</style>
+</head>
+<body>
+
+<!-- ════ PAGE 0 · HERO ════ -->
+<div class="page active" id="p0">
+  <div class="hero-wrap">
+    <div class="hero-icon"><i class="ti ti-heart" aria-hidden="true"></i></div>
+    <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--pk);margin-bottom:1rem;font-weight:500;">a special invitation</p>
+    <h1 class="hero-title">Hey <span>Alisha</span>,<br>I have something<br>to ask you.</h1>
+    <p class="hero-sub">I'm planning a night in Gurgaon — just for us. But first, I need to know your vibe.</p>
+    <button class="yes-btn" onclick="go(1)">Let's see what you planned <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>
+  <button class="no-btn" id="no0" onmouseenter="flee(this)" onclick="flee(this)">Not interested</button>
+</div>
+
+<!-- ════ PAGE 1 · THE BIG QUESTION ════ -->
+<div class="page" id="p1">
+  <div class="inner" style="justify-content:center;text-align:center;">
+    <div class="hero-icon" style="margin-bottom:1.5rem;"><i class="ti ti-heart-handshake" aria-hidden="true"></i></div>
+    <p class="eyebrow" style="justify-content:center;">the big question</p>
+    <h2 class="qtitle">Will you go on a<br>date with me?</h2>
+    <p class="qsub" style="max-width:300px;margin:0 auto 2rem;">Gurgaon. Just us. A night to remember.</p>
+    <button class="yes-btn" onclick="ans('date','Yes ♥'); go(2)">Yes, I would love that <i class="ti ti-heart" aria-hidden="true"></i></button>
+    <div style="height:80px;"></div>
+  </div>
+  <button class="no-btn" id="no1" onmouseenter="flee(this)" onclick="flee(this)">No thanks</button>
+</div>
+
+<!-- ════ PAGE 2 · WHEN ════ -->
+<div class="page" id="p2">
+  <div class="bar">
+    <button class="back-btn" onclick="go(1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:12%"></div></div>
+    <span class="step-lbl">1 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-calendar" aria-hidden="true"></i> when</p>
+    <h2 class="qtitle">When should I pick you up?</h2>
+    <p class="qsub">Pick a date and time. I'll be there, no matter what.</p>
+    <div class="row2">
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="date-inp" onchange="ans('date_val',this.value)"/>
+      </div>
+      <div class="field">
+        <label>Time</label>
+        <input type="time" id="time-inp" onchange="ans('time_val',this.value)"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Your pickup address or area</label>
+      <input type="text" id="pickup-inp" placeholder="e.g. DLF Phase 2, Sector 15, Sushant Lok…" oninput="ans('pickup',this.value)"/>
+    </div>
+    <button class="next-btn" onclick="go(3)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(3)">Skip for now</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 3 · DRIVE ════ -->
+<div class="page" id="p3">
+  <div class="bar">
+    <button class="back-btn" onclick="go(2)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:24%"></div></div>
+    <span class="step-lbl">2 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-steering-wheel" aria-hidden="true"></i> the ride</p>
+    <h2 class="qtitle">Where do you want to drive?</h2>
+    <p class="qsub">Pick the vibe. I'll plan the route.</p>
+    <div class="cards" id="drive-cards">
+      <div class="card" data-cat="drive" data-val="Night cruise — Cyber Hub loop, windows down, music loud" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-steering-wheel" aria-hidden="true"></i></div>
+        <div class="card-name">Night cruise</div>
+        <div class="card-hint">Cyber Hub loop</div>
+        <span class="badge">classic</span>
+      </div>
+      <div class="card" data-cat="drive" data-val="Aravalli viewpoint, Sohna Road — parked under the stars" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-mountain" aria-hidden="true"></i></div>
+        <div class="card-name">Aravalli viewpoint</div>
+        <div class="card-hint">Sohna Road, starry</div>
+        <span class="badge">peaceful</span>
+      </div>
+      <div class="card" data-cat="drive" data-val="Golf Course Road late night — city lights, premium stretch" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-building-skyscraper" aria-hidden="true"></i></div>
+        <div class="card-name">Golf Course Rd</div>
+        <div class="card-hint">City lights</div>
+        <span class="badge">lit</span>
+      </div>
+      <div class="card" data-cat="drive" data-val="Delhi–Gurgaon Expressway — no destination, just us and the road" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-road" aria-hidden="true"></i></div>
+        <div class="card-name">Expressway</div>
+        <div class="card-hint">No destination</div>
+        <span class="badge">free</span>
+      </div>
+      <div class="card" data-cat="drive" data-val="Sultanpur Lake Road — dark, quiet, empty stretch" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-ripple" aria-hidden="true"></i></div>
+        <div class="card-name">Sultanpur Lake Rd</div>
+        <div class="card-hint">Dark & quiet</div>
+        <span class="badge">hidden</span>
+      </div>
+      <div class="card" data-cat="drive" data-val="Manesar highway — wide open road, night air" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-wind" aria-hidden="true"></i></div>
+        <div class="card-name">Manesar highway</div>
+        <div class="card-hint">Open, night air</div>
+        <span class="badge">open</span>
+      </div>
+    </div>
+    <button class="next-btn" onclick="go(4)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(4)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 4 · FOOD ════ -->
+<div class="page" id="p4">
+  <div class="bar">
+    <button class="back-btn" onclick="go(3)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:36%"></div></div>
+    <span class="step-lbl">3 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-tools-kitchen-2" aria-hidden="true"></i> food</p>
+    <h2 class="qtitle">What do you want to eat?</h2>
+    <p class="qsub">Tell me and I'll handle it.</p>
+    <div class="cards" id="food-cards">
+      <div class="card" data-cat="food" data-val="Rolls & chai at Sector 29 dhaba — late night street vibes" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-flame" aria-hidden="true"></i></div>
+        <div class="card-name">Dhaba rolls & chai</div>
+        <div class="card-hint">Sector 29</div>
+        <span class="badge">street</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Social Cyber Hub rooftop — cocktails, good music, open sky" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-building" aria-hidden="true"></i></div>
+        <div class="card-name">Social rooftop</div>
+        <div class="card-hint">Cyber Hub, cocktails</div>
+        <span class="badge">rooftop</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Farzi Café Cyber Hub — fusion, molecular cocktails, fancy" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-candle" aria-hidden="true"></i></div>
+        <div class="card-name">Farzi Café</div>
+        <div class="card-hint">Fusion & cocktails</div>
+        <span class="badge">fancy</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Soi 7 Pub Cyber City — pizza, beer, cozy indoor pub" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-pizza" aria-hidden="true"></i></div>
+        <div class="card-name">Soi 7 pub</div>
+        <div class="card-hint">Cyber City, cozy</div>
+        <span class="badge">cozy</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Midnight biryani & seekh kebabs — takeaway, eaten in the car" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-bowl" aria-hidden="true"></i></div>
+        <div class="card-name">Midnight biryani</div>
+        <div class="card-hint">Takeaway in the car</div>
+        <span class="badge">late night</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Street momos & maggi at Sector 14 — simple, delicious, desi" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-soup" aria-hidden="true"></i></div>
+        <div class="card-name">Street momos</div>
+        <div class="card-hint">Sector 14, desi</div>
+        <span class="badge">desi</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Punjabi dhaba — kulcha, naan, butter chicken, hearty & real" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-bread" aria-hidden="true"></i></div>
+        <div class="card-name">Punjabi dhaba</div>
+        <div class="card-hint">Butter chicken & naan</div>
+        <span class="badge">hearty</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Dessert run — Bikanervala kulfi or Keventers milkshake" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-ice-cream" aria-hidden="true"></i></div>
+        <div class="card-name">Dessert only</div>
+        <div class="card-hint">Kulfi or milkshake</div>
+        <span class="badge">sweet</span>
+      </div>
+      <div class="card" data-cat="food" data-val="Light wraps & salad — something easy, no heavy meal" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-salad" aria-hidden="true"></i></div>
+        <div class="card-name">Light wraps</div>
+        <div class="card-hint">Easy & light</div>
+        <span class="badge">light</span>
+      </div>
+    </div>
+    <button class="next-btn" onclick="go(5)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(5)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 5 · MUSIC ════ -->
+<div class="page" id="p5">
+  <div class="bar">
+    <button class="back-btn" onclick="go(4)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:48%"></div></div>
+    <span class="step-lbl">4 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-music" aria-hidden="true"></i> soundtrack</p>
+    <h2 class="qtitle">What's playing on the drive?</h2>
+    <p class="qsub">Pick as many as you want. I'll build the playlist.</p>
+    <div class="chips" id="music-chips">
+      <span class="chip" data-val="Bollywood slow jams — Arijit Singh, Jubin Nautiyal, Atif Aslam" onclick="chipTog(this,'music')"><i class="ti ti-heart" aria-hidden="true"></i> Bollywood feels</span>
+      <span class="chip" data-val="Indie Hindi — Prateek Kuhad, Ritviz, Lucky Ali, Seedhe Maut" onclick="chipTog(this,'music')"><i class="ti ti-leaf" aria-hidden="true"></i> Indie Hindi</span>
+      <span class="chip" data-val="English R&B & soul — The Weeknd, Frank Ocean, H.E.R., SZA" onclick="chipTog(this,'music')"><i class="ti ti-star" aria-hidden="true"></i> English R&B</span>
+      <span class="chip" data-val="Lo-fi chill beats — no words, just vibes" onclick="chipTog(this,'music')"><i class="ti ti-wave-sine" aria-hidden="true"></i> Lo-fi</span>
+      <span class="chip" data-val="Punjabi late night — Diljit Dosanjh, AP Dhillon, Shubh" onclick="chipTog(this,'music')"><i class="ti ti-speakerphone" aria-hidden="true"></i> Punjabi</span>
+      <span class="chip" data-val="90s Bollywood classics — golden era romance" onclick="chipTog(this,'music')"><i class="ti ti-clock" aria-hidden="true"></i> 90s Bollywood</span>
+      <span class="chip" data-val="English pop — Ed Sheeran, Taylor Swift, Coldplay, Adele" onclick="chipTog(this,'music')"><i class="ti ti-music" aria-hidden="true"></i> English pop</span>
+      <span class="chip" data-val="English indie & alt — Arctic Monkeys, Hozier, Phoebe Bridgers" onclick="chipTog(this,'music')"><i class="ti ti-guitar-pick" aria-hidden="true"></i> English indie</span>
+      <span class="chip" data-val="Hip-hop & rap — Drake, Kendrick, Divine, Emiway" onclick="chipTog(this,'music')"><i class="ti ti-microphone-2" aria-hidden="true"></i> Hip-hop</span>
+      <span class="chip" data-val="Sufi & ghazal — Rahat Fateh Ali Khan, Nusrat, old soul" onclick="chipTog(this,'music')"><i class="ti ti-moon" aria-hidden="true"></i> Sufi / Ghazal</span>
+      <span class="chip" data-val="Shuffle everything — rotate all genres through the night" onclick="chipTog(this,'music')"><i class="ti ti-arrows-shuffle" aria-hidden="true"></i> Shuffle all</span>
+    </div>
+    <button class="next-btn" onclick="go(6)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(6)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 6 · PLACES ════ -->
+<div class="page" id="p6">
+  <div class="bar">
+    <button class="back-btn" onclick="go(5)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:60%"></div></div>
+    <span class="step-lbl">5 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-map-pin" aria-hidden="true"></i> the spot</p>
+    <h2 class="qtitle">Where do you want to be?</h2>
+    <p class="qsub">A place to park, chill, or just exist.</p>
+    <div class="cards" id="place-cards">
+      <div class="card" data-cat="place" data-val="Leisure Valley Park, Sector 29 — open, peaceful, lit at night" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-trees" aria-hidden="true"></i></div>
+        <div class="card-name">Leisure Valley Park</div>
+        <div class="card-hint">Sector 29, open & lit</div>
+        <span class="badge">park</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Cyber Hub walkway — buzzing night scene, food stalls, energy" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-building-community" aria-hidden="true"></i></div>
+        <div class="card-name">Cyber Hub</div>
+        <div class="card-hint">Night scene, energy</div>
+        <span class="badge">lively</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Ambience Mall rooftop — late night hangout, chill vibe" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+        <div class="card-name">Ambience Mall</div>
+        <div class="card-hint">Rooftop, late night</div>
+        <span class="badge">mall</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Aravalli Biodiversity Park — dark sky, quiet, nature" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-mountain" aria-hidden="true"></i></div>
+        <div class="card-name">Aravalli Park</div>
+        <div class="card-hint">Dark sky, nature</div>
+        <span class="badge">nature</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Sheetla Mata Road viewpoint — elevated, city view, tucked away" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-eye" aria-hidden="true"></i></div>
+        <div class="card-name">Sheetla Mata view</div>
+        <div class="card-hint">Elevated city views</div>
+        <span class="badge">view</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Sultanpur Bird Sanctuary road — isolated, peaceful night drive" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-feather" aria-hidden="true"></i></div>
+        <div class="card-name">Sultanpur road</div>
+        <div class="card-hint">Isolated & peaceful</div>
+        <span class="badge">hidden</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Rooftop café somewhere in Sector 56 — chill neighbourhood spot" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-coffee" aria-hidden="true"></i></div>
+        <div class="card-name">Rooftop café</div>
+        <div class="card-hint">Sector 56, low key</div>
+        <span class="badge">café</span>
+      </div>
+      <div class="card" data-cat="place" data-val="Just drive — no stop, the road is the destination" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-wind" aria-hidden="true"></i></div>
+        <div class="card-name">Just keep driving</div>
+        <div class="card-hint">Ride is the vibe</div>
+        <span class="badge">free</span>
+      </div>
+    </div>
+    <button class="next-btn" onclick="go(7)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(7)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 7 · CIGARETTES ════ -->
+<div class="page" id="p7">
+  <div class="bar">
+    <button class="back-btn" onclick="go(6)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:72%"></div></div>
+    <span class="step-lbl">6 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-smoking" aria-hidden="true"></i> smokes</p>
+    <h2 class="qtitle">What cigarette tonight?</h2>
+    <p class="qsub">I'll carry it. Just show up.</p>
+    <div class="cards" id="cig-cards">
+      <div class="card" data-cat="cig" data-val="Marlboro Red — strong, bold, classic" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-smoking" aria-hidden="true"></i></div>
+        <div class="card-name">Marlboro Red</div>
+        <div class="card-hint">Bold & classic</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="Marlboro Gold — lighter, smooth, easy" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-smoking" aria-hidden="true"></i></div>
+        <div class="card-name">Marlboro Gold</div>
+        <div class="card-hint">Lighter & smooth</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="Camel Blue — easy, smooth, great to share" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-smoking" aria-hidden="true"></i></div>
+        <div class="card-name">Camel Blue</div>
+        <div class="card-hint">Smooth & shareable</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="Gold Flake Kings — the desi OG" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-smoking" aria-hidden="true"></i></div>
+        <div class="card-name">Gold Flake Kings</div>
+        <div class="card-hint">Desi classic</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="Dunhill Fine Cut — premium & refined" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-smoking" aria-hidden="true"></i></div>
+        <div class="card-name">Dunhill Fine Cut</div>
+        <div class="card-hint">Premium & refined</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="No cigarettes tonight" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-x" aria-hidden="true"></i></div>
+        <div class="card-name">No smokes</div>
+        <div class="card-hint">Keeping it clean</div>
+      </div>
+      <div class="card" data-cat="cig" data-val="custom" id="cig-custom-card" onclick="cardPickCustomCig(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+        <div class="card-name">My choice</div>
+        <div class="card-hint">Type your own brand</div>
+        <span class="badge">custom</span>
+      </div>
+    </div>
+    <div class="custom-reveal" id="cig-custom-reveal">
+      <div class="field" style="margin-bottom:0;">
+        <label>Which cigarette?</label>
+        <input type="text" id="cig-custom-inp" placeholder="e.g. Lucky Strike, Esse, Vogue…" oninput="ans('cig', this.value || 'custom')"/>
+      </div>
+    </div>
+    <button class="next-btn" style="margin-top:1.2rem;" onclick="go(8)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(8)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 8 · SMOKE SESSION ════ -->
+<div class="page" id="p8">
+  <div class="bar">
+    <button class="back-btn" onclick="go(7)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:84%"></div></div>
+    <span class="step-lbl">7 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-leaf" aria-hidden="true"></i> session</p>
+    <h2 class="qtitle">Wanna smoke up?</h2>
+    <p class="qsub">No pressure. Totally your call.</p>
+    <div class="cards" id="smoke-cards">
+      <div class="card" data-cat="smoke" data-val="Hash joint at Aravalli viewpoint — mellow, stars, just us" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-leaf" aria-hidden="true"></i></div>
+        <div class="card-name">Hash at viewpoint</div>
+        <div class="card-hint">Stars & mellow vibes</div>
+        <span class="badge">mellow</span>
+      </div>
+      <div class="card" data-cat="smoke" data-val="Weed roll in the car — parked somewhere quiet and private" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-car" aria-hidden="true"></i></div>
+        <div class="card-name">Car session</div>
+        <div class="card-hint">Quiet parked spot</div>
+        <span class="badge">private</span>
+      </div>
+      <div class="card" data-cat="smoke" data-val="Pre-rolled before pickup — start the night already flying" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-home" aria-hidden="true"></i></div>
+        <div class="card-name">Pre-game it</div>
+        <div class="card-hint">Before pickup</div>
+        <span class="badge">pregame</span>
+      </div>
+      <div class="card" data-cat="smoke" data-val="Sober tonight — no smoke, just pure energy" onclick="cardPick(this)">
+        <div class="tick"><i class="ti ti-check"></i></div>
+        <div class="card-ico"><i class="ti ti-coffee" aria-hidden="true"></i></div>
+        <div class="card-name">Keep it sober</div>
+        <div class="card-hint">Good vibes without it</div>
+        <span class="badge">sober</span>
+      </div>
+    </div>
+    <p class="note"><i class="ti ti-info-circle" aria-hidden="true"></i> Private spots only. Won't drive after.</p>
+    <button class="next-btn" onclick="go(9)">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <div class="skip-lnk" onclick="go(9)">Skip</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 9 · EXTRAS ════ -->
+<div class="page" id="p9">
+  <div class="bar">
+    <button class="back-btn" onclick="go(8)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:92%"></div></div>
+    <span class="step-lbl">8 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-sparkles" aria-hidden="true"></i> extras</p>
+    <h2 class="qtitle">What would make it perfect?</h2>
+    <p class="qsub">Pick everything you want. I'll make it happen.</p>
+    <div class="chips" id="extra-chips">
+      <span class="chip" data-val="Bring flowers on pickup" onclick="chipTog(this,'extra')"><i class="ti ti-bouquet" aria-hidden="true"></i> Flowers on pickup</span>
+      <span class="chip" data-val="Carry her favourite snacks in the car" onclick="chipTog(this,'extra')"><i class="ti ti-basket" aria-hidden="true"></i> Her fav snacks</span>
+      <span class="chip" data-val="Stargazing stop — blanket on the hood" onclick="chipTog(this,'extra')"><i class="ti ti-stars" aria-hidden="true"></i> Stargazing</span>
+      <span class="chip" data-val="Play her favourite song when she gets in" onclick="chipTog(this,'extra')"><i class="ti ti-player-play" aria-hidden="true"></i> Her song on entry</span>
+      <span class="chip" data-val="Pack a blanket for the park or viewpoint" onclick="chipTog(this,'extra')"><i class="ti ti-snowflake" aria-hidden="true"></i> Blanket</span>
+      <span class="chip" data-val="Surprise dessert at the end — kulfi or milkshake" onclick="chipTog(this,'extra')"><i class="ti ti-ice-cream" aria-hidden="true"></i> Surprise dessert</span>
+      <span class="chip" data-val="Carry her favourite drink — cold coffee or juice" onclick="chipTog(this,'extra')"><i class="ti ti-cup" aria-hidden="true"></i> Her fav drink</span>
+      <span class="chip" data-val="No plan — figure it out in real time" onclick="chipTog(this,'extra')"><i class="ti ti-flame" aria-hidden="true"></i> Keep it spontaneous</span>
+    </div>
+    <div class="field" style="margin-top:1rem;">
+      <label>Anything else?</label>
+      <textarea id="note-inp" placeholder="A song request, a place you love, something special you want…" oninput="ans('note',this.value)"></textarea>
+    </div>
+    <button class="next-btn" onclick="go(10)">See the full plan <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>
+</div>
+
+<!-- ════ PAGE 10 · SUMMARY ════ -->
+<div class="page" id="p10">
+  <div class="bar">
+    <button class="back-btn" onclick="go(9)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <div class="prog-wrap"><div class="prog-fill" style="width:100%"></div></div>
+    <span class="step-lbl">9 / 9</span>
+  </div>
+  <div class="inner">
+    <p class="eyebrow"><i class="ti ti-sparkles" aria-hidden="true"></i> your night plan</p>
+    <h2 class="qtitle">Here's what we're doing.</h2>
+    <p class="qsub">Your choices are going straight to him now.</p>
+    <div class="sum-card" id="sum-card"></div>
+    <div class="action-stack">
+      <button class="wa-btn" onclick="sendWA()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send to him on WhatsApp
+      </button>
+      <button class="copy-btn" onclick="copyPlan()"><i class="ti ti-copy" aria-hidden="true"></i> Copy the plan</button>
+    </div>
+    <div class="restart-lnk" onclick="go(0)"><i class="ti ti-refresh" aria-hidden="true"></i> Start over</div>
+  </div>
+</div>
+
+<!-- ════ PAGE 11 · SENT ════ -->
+<div class="page" id="p11">
+  <div class="inner" style="text-align:center;justify-content:center;">
+    <div class="sent-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
+    <p class="eyebrow" style="justify-content:center;">it's done</p>
+    <h2 class="qtitle">Sent. He knows now.</h2>
+    <p class="qsub" style="max-width:300px;margin:0 auto 2rem;">Your answers went straight to him. He'll plan the rest. Get ready, Alisha.</p>
+    <button class="yes-btn" onclick="go(0)" style="background:var(--pk-d);">
+      <i class="ti ti-heart" aria-hidden="true"></i> Can't wait
+    </button>
+  </div>
+</div>
+
+<script>
+const PHONE = '919717461302';
+const answers = {};
+const multi = { music: [], extra: [] };
+let cur = 0;
+
+function go(n) {
+  document.getElementById('p'+cur).classList.remove('active');
+  cur = n;
+  const el = document.getElementById('p'+n);
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (n === 10) buildSummary();
+}
+
+function ans(k, v) { answers[k] = v; }
+
+function cardPick(el) {
+  const cat = el.dataset.cat;
+  const val = el.dataset.val;
+  document.querySelectorAll('[data-cat="'+cat+'"]').forEach(c => c.classList.remove('on'));
+  if (answers[cat] === val) { delete answers[cat]; }
+  else { el.classList.add('on'); answers[cat] = val; }
+}
+
+function cardPickCustomCig(el) {
+  document.querySelectorAll('[data-cat="cig"]').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  answers['cig'] = document.getElementById('cig-custom-inp').value || '';
+  const rev = document.getElementById('cig-custom-reveal');
+  rev.classList.add('open');
+  setTimeout(() => document.getElementById('cig-custom-inp').focus(), 300);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('cig-custom-inp').addEventListener('input', function() {
+    if (document.getElementById('cig-custom-card').classList.contains('on')) {
+      answers['cig'] = this.value;
+    }
+  });
+});
+
+function chipTog(el, grp) {
+  const val = el.dataset.val;
+  el.classList.toggle('on');
+  const arr = multi[grp];
+  const i = arr.indexOf(val);
+  if (i === -1) arr.push(val); else arr.splice(i, 1);
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function fmt12(t) {
+  if (!t) return '';
+  const [h,m] = t.split(':');
+  const hr = parseInt(h);
+  return ((hr%12)||12)+':'+m+' '+(hr>=12?'PM':'AM');
+}
+
+function getCigLabel() {
+  if (!answers.cig) return null;
+  if (answers.cig === 'custom') return 'My choice (custom)';
+  const customVal = document.getElementById('cig-custom-inp') ? document.getElementById('cig-custom-inp').value.trim() : '';
+  if (document.getElementById('cig-custom-card') && document.getElementById('cig-custom-card').classList.contains('on') && customVal) {
+    return customVal;
+  }
+  return answers.cig;
+}
+
+function buildRows() {
+  const rows = [];
+  if (answers.date_val) rows.push({ico:'ti-calendar',label:'Date',val:fmtDate(answers.date_val)});
+  if (answers.time_val) rows.push({ico:'ti-clock',label:'Pickup time',val:fmt12(answers.time_val)});
+  if (answers.pickup) rows.push({ico:'ti-map-pin',label:'Pickup from',val:answers.pickup});
+  if (answers.drive) rows.push({ico:'ti-steering-wheel',label:'Drive',val:answers.drive});
+  if (answers.food) rows.push({ico:'ti-tools-kitchen-2',label:'Food',val:answers.food});
+  if (multi.music.length) rows.push({ico:'ti-music',label:'Music',val:multi.music.join(' + ')});
+  if (answers.place) rows.push({ico:'ti-map-pin',label:'Spot',val:answers.place});
+  const cig = getCigLabel();
+  if (cig) rows.push({ico:'ti-smoking',label:'Cigarette',val:cig});
+  if (answers.smoke) rows.push({ico:'ti-leaf',label:'Session',val:answers.smoke});
+  if (multi.extra.length) rows.push({ico:'ti-sparkles',label:'Extras',val:multi.extra.join(' · ')});
+  if (answers.note) rows.push({ico:'ti-pencil',label:'Her note',val:answers.note});
+  return rows;
+}
+
+function buildSummary() {
+  const rows = buildRows();
+  const box = document.getElementById('sum-card');
+  if (!rows.length) {
+    box.innerHTML = '<p style="padding:1.5rem;font-size:14px;color:var(--tt);text-align:center;">No selections yet.</p>';
+    return;
+  }
+  box.innerHTML =
+    '<div class="sum-header"><div class="sum-header-title"><i class="ti ti-heart" style="color:var(--pk);margin-right:6px;"></i>Alisha\'s date plan — Gurgaon</div></div>' +
+    rows.map(r => `
+      <div class="sum-row">
+        <div class="sum-ico-wrap"><i class="ti ${r.ico}" aria-hidden="true"></i></div>
+        <div>
+          <div class="sum-lbl">${r.label}</div>
+          <div class="sum-val">${r.val}</div>
+        </div>
+      </div>
+    `).join('');
+}
+
+function buildMsg() {
+  const rows = buildRows();
+  const lines = ["Hey 🖤 I filled it out — here's what I want:\n"];
+  const icons = {'Date':'📅','Pickup time':'🕐','Pickup from':'📍','Drive':'🚗','Food':'🍽','Music':'🎵','Spot':'📌','Cigarette':'🚬','Session':'🍃','Extras':'✨','Her note':''};
+  rows.forEach(r => {
+    const ico = icons[r.label] || '•';
+    lines.push((ico ? ico+' ' : '') + r.label + ': ' + r.val);
+  });
+  lines.push("\nI said yes. Don't mess it up. 🖤");
+  return lines.join('\n');
+}
+
+function sendWA() {
+  const msg = encodeURIComponent(buildMsg());
+  window.open('https://wa.me/'+PHONE+'?text='+msg,'_blank');
+  setTimeout(() => go(11), 600);
+}
+
+function copyPlan() {
+  navigator.clipboard.writeText(buildMsg()).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    btn.style.color = 'var(--pk)';
+    btn.style.borderColor = 'var(--pk)';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.color=''; btn.style.borderColor=''; }, 2000);
+  });
+}
+
+// FLEE LOGIC — "No" button runs away
+const positions = [
+  {top:'20px',left:'20px'},{top:'20px',right:'20px'},
+  {bottom:'120px',left:'20px'},{bottom:'120px',right:'20px'},
+  {top:'50%',left:'10px'},{top:'50%',right:'10px'},
+  {top:'30%',left:'40%'},{bottom:'200px',left:'35%'},
+  {top:'70px',left:'50%'},{bottom:'300px',right:'30px'},
+];
+let fleeIdx = 0;
+function flee(btn) {
+  fleeIdx = (fleeIdx + 1) % positions.length;
+  const pos = positions[fleeIdx];
+  Object.assign(btn.style, {top:'',bottom:'',left:'',right:''});
+  Object.assign(btn.style, pos);
+  // Random size shrink for fun
+  const scale = 0.85 + Math.random() * 0.2;
+  btn.style.transform = 'scale('+scale.toFixed(2)+')';
+}
+</script>
+</body>
+</html>
